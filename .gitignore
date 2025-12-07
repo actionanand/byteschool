@@ -8,6 +8,7 @@
 
 # Parcel cache
 .parcel-cache
+/.parcel-cache
 
 # Node
 /node_modules
