@@ -1042,7 +1042,7 @@ pytest --cov=.
 ---
 
 **Navigation:**
-- [← Previous: File Organization](/?page=python/py-07-file-organization)
-- [→ Next: Logging](/?page=python/py-09-logging)
-- [↑ Back to Python Basics](/?page=python/py-01-basics)
-- [🏠 Home](/?page=home)
+- [← Previous: File Organization](#/py-file-organization)
+- [→ Next: Logging](#/py-logging)
+- [↑ Back to Python Basics](#/py-basics)
+- [🏠 Home](#/home)

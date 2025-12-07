@@ -200,8 +200,15 @@ export default class MarkdownRenderer
     text = text.replace(/\*([^\*]+)\*/g, '<em>$1</em>')
     text = text.replace(/_([^_]+)_/g, '<em>$1</em>')
     
-    # 4. Links
-    text = text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>')
+    # 4. Links - handle internal (#/) vs external links differently
+    text = text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (match, linkText, url) =>
+      if url.startsWith('#/')
+        # Internal hash link - no target blank
+        "<a href=\"#{url}\">#{linkText}</a>"
+      else
+        # External link - open in new tab
+        "<a href=\"#{url}\" target=\"_blank\" rel=\"noopener\">#{linkText}</a>"
+    )
     
     text
 

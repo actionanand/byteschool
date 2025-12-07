@@ -567,7 +567,7 @@ users = session.query(User).filter(User.age > 25).all()
 ---
 
 **Navigation:**
-- [← Previous: Advanced Concepts](/?page=python/py-05-advanced)
-- [→ Next: File Organization](/?page=python/py-07-file-organization)
-- [↑ Back to Python Basics](/?page=python/py-01-basics)
-- [🏠 Home](/?page=home)
+- [← Previous: Advanced Concepts](#/py-advanced)
+- [→ Next: File Organization](#/py-file-organization)
+- [↑ Back to Python Basics](#/py-basics)
+- [🏠 Home](#/home)
