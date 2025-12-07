@@ -1,0 +1,44 @@
+name: GitHub Pages - ByteSchool (CoffeeScript + Vite)
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.11.0'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Extract repository name from package.json
+        id: package
+        run: echo "name=$(node -p "require('./package.json').name")" >> $GITHUB_OUTPUT
+
+      - name: Build Vite app for GitHub Pages
+        run: npm run build:gh
+
+      - name: Create 404.html for client-side routing
+        run: cp dist/index.html dist/404.html
+
+      - name: Deploy to GitHub Pages
+        if: success()
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          publish_branch: gh-pages
+          enable_jekyll: false
+          cname: false

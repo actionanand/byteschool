@@ -1,0 +1,83 @@
+# Todo Item Component - Showcasing individual todo rendering
+# Demonstrates: DOM manipulation, event delegation, class binding
+
+export default class TodoItem
+  constructor: (@todo, @onToggle, @onDelete, @onEdit) ->
+    @element = null
+    @render()
+
+  render: ->
+    @element = document.createElement('div')
+    @element.className = "todo-item #{@todo.statusBadge} priority-#{@todo.priority}"
+    @element.dataset.todoId = @todo.id
+
+    priorityIcon = switch @todo.priority
+      when 'high' then '🔴'
+      when 'medium' then '🟡'
+      when 'low' then '🟢'
+      else '⚪'
+
+    categoryEmoji = switch @todo.category
+      when 'work' then '💼'
+      when 'personal' then '👤'
+      when 'shopping' then '🛍️'
+      when 'health' then '🏥'
+      else '📝'
+
+    dueDate = if @todo.dueDate
+      "<span class=\"due-date\">📅 #{@todo.formattedDate}</span>"
+    else
+      ''
+
+    @element.innerHTML = '''
+      <div class="todo-content">
+        <input type="checkbox" class="todo-checkbox" #{if @todo.completed then 'checked' else ''} />
+        <div class="todo-details">
+          <div class="todo-header">
+            <span class="priority-indicator" title="Priority: #{@todo.priority}">#{priorityIcon}</span>
+            <span class="category-badge" title="#{@todo.category}">#{categoryEmoji}</span>
+            <span class="todo-text">#{@todo.displayTitle}</span>
+            #{dueDate}
+          </div>
+          #{if @todo.description then "<div class=\"todo-description\">#{@todo.description}</div>" else ''}
+        </div>
+      </div>
+      <div class="todo-actions">
+        <button class="edit-btn" title="Edit" aria-label="Edit todo">✏️</button>
+        <button class="delete-btn" title="Delete" aria-label="Delete todo">🗑️</button>
+      </div>
+    '''
+
+    @attachEventListeners()
+    @element
+
+  attachEventListeners: ->
+    checkbox = @element.querySelector('.todo-checkbox')
+    deleteBtn = @element.querySelector('.delete-btn')
+    editBtn = @element.querySelector('.edit-btn')
+
+    checkbox.addEventListener('change', =>
+      @onToggle?.(@todo.id)
+    )
+
+    deleteBtn.addEventListener('click', =>
+      @onDelete?.(@todo.id)
+    )
+
+    editBtn.addEventListener('click', =>
+      @onEdit?.(@todo.id)
+    )
+
+    # Double-click to edit
+    @element.addEventListener('dblclick', =>
+      @onEdit?.(@todo.id)
+    )
+
+  remove: ->
+    @element?.remove()
+
+  update: (todo) ->
+    @todo = todo
+    oldElement = @element
+    @render()
+    oldElement.replaceWith(@element)
