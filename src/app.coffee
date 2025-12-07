@@ -32,7 +32,7 @@ export default class TodoApp
 
         <footer class=\"app-footer\">
           <p>📚 <strong>ByteSchool</strong> - Learn CoffeeScript & Python</p>
-          <p class=\"keyboard-hint\">💡 Tip: Press <kbd>?</kbd> for keyboard shortcuts</p>
+          <p class=\"footer-quote\">💡 &quot;Code is like humor. When you have to explain it, it's bad.&quot; - Cory House</p>
         </footer>
       </div>
     "
