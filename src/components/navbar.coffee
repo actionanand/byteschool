@@ -19,6 +19,8 @@ export default class NavigationBar
       { page: 'py-advanced', label: '🚀 Advanced', icon: '✨', section: 'python' }
       { page: 'py-database', label: '💾 Database', icon: '🗄️', section: 'python' }
       { page: 'py-file-organization', label: '📁 Files', icon: '🗂️', section: 'python' }
+      { page: 'py-frameworks-libraries', label: '🔧 Frameworks', icon: '📚', section: 'python' }
+      { page: 'py-logging', label: '📝 Logging', icon: '📋', section: 'python' }
     ]
     @render()
     @attachEventListeners()

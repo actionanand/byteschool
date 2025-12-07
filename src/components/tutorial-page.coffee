@@ -100,11 +100,7 @@ export default class TutorialPage
       </article>
     "
 
-    # Style code blocks
-    @styleCodeBlocks()
+    # Trigger Prism syntax highlighting
+    if window.Prism?
+      window.Prism.highlightAllUnder(@container)
 
-  styleCodeBlocks: ->
-    codeBlocks = @container.querySelectorAll('code-block')
-    codeBlocks.forEach((block) ->
-      block.classList.add('highlighted')
-    )
