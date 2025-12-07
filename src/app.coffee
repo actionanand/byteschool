@@ -195,8 +195,11 @@ export default class TodoApp
     @setupTodoEventListeners()
 
   showTutorial: (tutorialName) ->
-    pageContainer = document.querySelector('.page-container')
-    @tutorialPage.container = pageContainer
+    # Make sure tutorialPage is initialized
+    unless @tutorialPage?
+      pageContainer = document.querySelector('.page-container')
+      @tutorialPage = new TutorialPage(pageContainer)
+    
     @tutorialPage.render(tutorialName)
 
   setupTodoEventListeners: ->
