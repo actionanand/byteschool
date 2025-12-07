@@ -370,7 +370,7 @@ def calculate_tax(amount: float, rate: float) -> float:
 ---
 
 **Navigation:**
-- [← Previous: Data Structures](/?page=python/py-02-data-structures)
-- [→ Next: Classes & OOP](/?page=python/py-04-classes)
-- [↑ Back to Python Basics](/?page=python/py-01-basics)
-- [🏠 Home](/?page=home)
+- [← Previous: Data Structures](#/py-data-structures)
+- [→ Next: Classes & OOP](#/py-classes)
+- [↑ Back to Python Basics](#/py-basics)
+- [🏠 Home](#/home)

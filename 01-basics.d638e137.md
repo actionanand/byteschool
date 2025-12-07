@@ -149,5 +149,5 @@ x = 10  # End of line comment
 ---
 
 **Navigation:**
-- [→ Next: Functions & Methods](/?page=coffeescript/02-functions)
-- [🏠 Home](/?page=home)
+- [→ Next: Functions & Methods](#/functions)
+- [🏠 Home](#/home)

@@ -1118,10 +1118,10 @@ class Config:
 ---
 
 **Navigation:**
-- [← Previous: Functions & Methods](/?page=python/py-03-functions)
-- [→ Next: Advanced Concepts](/?page=python/py-05-advanced)
-- [↑ Back to Python Basics](/?page=python/py-01-basics)
-- [🏠 Home](/?page=home)
+- [← Previous: Functions & Methods](#/py-functions)
+- [→ Next: Advanced Concepts](#/py-advanced)
+- [↑ Back to Python Basics](#/py-basics)
+- [🏠 Home](#/home)
 
 **See Also:**
-- [Frameworks & Libraries](/?page=python/py-08-frameworks-libraries) - Flask, Django, FastAPI, and more
+- [Frameworks & Libraries](#/py-frameworks-libraries) - Flask, Django, FastAPI, and more

@@ -226,7 +226,7 @@ filterByStore = makeFilter(store)
 ---
 
 **Navigation:**
-- [← Previous: CoffeeScript Basics](/?page=coffeescript/01-basics)
-- [→ Next: Classes & OOP](/?page=coffeescript/03-classes)
-- [↑ Back to Basics](/?page=coffeescript/01-basics)
-- [🏠 Home](/?page=home)
+- [← Previous: CoffeeScript Basics](#/basics)
+- [→ Next: Classes & OOP](#/classes)
+- [↑ Back to Basics](#/basics)
+- [🏠 Home](#/home)

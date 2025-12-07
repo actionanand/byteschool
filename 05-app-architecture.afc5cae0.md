@@ -320,10 +320,10 @@ This is a complete, production-ready application that showcases CoffeeScript bes
 ---
 
 **Navigation:**
-- [← Previous: Advanced Patterns](/?page=coffeescript/04-advanced)
-- [↑ Back to Basics](/?page=coffeescript/01-basics)
-- [🏠 Home](/?page=home)
+- [← Previous: Advanced Patterns](#/advanced)
+- [↑ Back to Basics](#/basics)
+- [🏠 Home](#/home)
 
 **Explore More:**
-- [Python Tutorials](/?page=python/py-01-basics) - Learn Python alongside CoffeeScript
+- [Python Tutorials](#/py-basics) - Learn Python alongside CoffeeScript
 - Check the `src/` directory in the project to see all these concepts in action

@@ -1027,7 +1027,7 @@ pip install -r requirements.txt
 ---
 
 **Navigation:**
-- [← Previous: Database Operations](/?page=python/py-06-database)
-- [→ Next: Frameworks & Libraries](/?page=python/py-08-frameworks-libraries)
-- [↑ Back to Python Basics](/?page=python/py-01-basics)
-- [🏠 Home](/?page=home)
+- [← Previous: Database Operations](#/py-database)
+- [→ Next: Frameworks & Libraries](#/py-frameworks-libraries)
+- [↑ Back to Python Basics](#/py-basics)
+- [🏠 Home](#/home)
