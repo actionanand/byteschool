@@ -32,7 +32,7 @@ export default class TodoApp
 
         <footer class=\"app-footer\">
           <p>📚 <strong>ByteSchool</strong> - Learn CoffeeScript & Python</p>
-          <p class=\"keyboard-hint\">💡 Tip: Press <kbd>?</kbd> for keyboard shortcuts</p>
+          <p class=\"footer-quote\">💡 &quot;Code is like humor. When you have to explain it, it's bad.&quot; - Cory House</p>
         </footer>
       </div>
     "
@@ -125,10 +125,13 @@ export default class TodoApp
     
     # Tutorial page container
     pageContainer = document.querySelector('.page-container')
-    @tutorialPage = new TutorialPage(pageContainer)
+    @tutorialPage = new TutorialPage(pageContainer, @router)
     
     # Start router after components initialized
     @router.start()
+    
+    # Update navigation for initial page
+    @updateNavigation()
 
   setupEventListeners: ->
     # Router handles all page navigation
@@ -193,11 +196,20 @@ export default class TodoApp
 
     # Attach control panel listeners
     @setupTodoEventListeners()
+    
+    # Scroll to top of page
+    window.scrollTo(0, 0)
 
   showTutorial: (tutorialName) ->
-    pageContainer = document.querySelector('.page-container')
-    @tutorialPage.container = pageContainer
+    # Make sure tutorialPage is initialized
+    unless @tutorialPage?
+      pageContainer = document.querySelector('.page-container')
+      @tutorialPage = new TutorialPage(pageContainer, @router)
+    
     @tutorialPage.render(tutorialName)
+    
+    # Scroll to top of page
+    window.scrollTo(0, 0)
 
   setupTodoEventListeners: ->
     pageContainer = document.querySelector('.page-container')

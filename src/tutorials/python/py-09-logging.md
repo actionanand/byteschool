@@ -772,6 +772,6 @@ self.__log.error('Error in %(module)s: %(error)s', {'module': 'auth', 'error': s
 ---
 
 **Navigation:**
-- [← Previous: Frameworks & Libraries](/?page=python/py-08-frameworks-libraries)
-- [↑ Back to Python Basics](/?page=python/py-01-basics)
-- [🏠 Home](/?page=home)
+- [← Previous: Frameworks & Libraries](#/py-frameworks-libraries)
+- [↑ Back to Python Basics](#/py-basics)
+- [🏠 Home](#/home)

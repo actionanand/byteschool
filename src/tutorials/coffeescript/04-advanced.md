@@ -259,7 +259,7 @@ stats = @todos.map((todo) -> todo.priority)
 ---
 
 **Navigation:**
-- [← Previous: Classes & OOP](/?page=coffeescript/03-classes)
-- [→ Next: Todo App Architecture](/?page=coffeescript/05-app-architecture)
-- [↑ Back to Basics](/?page=coffeescript/01-basics)
-- [🏠 Home](/?page=home)
+- [← Previous: Classes & OOP](#/classes)
+- [→ Next: Todo App Architecture](#/app-architecture)
+- [↑ Back to Basics](#/basics)
+- [🏠 Home](#/home)

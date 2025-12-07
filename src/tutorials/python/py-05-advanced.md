@@ -489,7 +489,7 @@ list(product([1, 2], ['a', 'b']))  # [(1, 'a'), (1, 'b'), (2, 'a'), (2, 'b')]
 ---
 
 **Navigation:**
-- [← Previous: Classes & OOP](/?page=python/py-04-classes)
-- [→ Next: Database Operations](/?page=python/py-06-database)
-- [↑ Back to Python Basics](/?page=python/py-01-basics)
-- [🏠 Home](/?page=home)
+- [← Previous: Classes & OOP](#/py-classes)
+- [→ Next: Database Operations](#/py-database)
+- [↑ Back to Python Basics](#/py-basics)
+- [🏠 Home](#/home)

@@ -247,7 +247,7 @@ task.getDaysOld()      # Returns how many days old
 ---
 
 **Navigation:**
-- [← Previous: Functions & Methods](/?page=coffeescript/02-functions)
-- [→ Next: Advanced Patterns](/?page=coffeescript/04-advanced)
-- [↑ Back to Basics](/?page=coffeescript/01-basics)
-- [🏠 Home](/?page=home)
+- [← Previous: Functions & Methods](#/functions)
+- [→ Next: Advanced Patterns](#/advanced)
+- [↑ Back to Basics](#/basics)
+- [🏠 Home](#/home)

@@ -563,5 +563,5 @@ def find_user(user_id: int) -> str | None:
 ---
 
 **Navigation:**
-- [→ Next: Data Structures](/?page=python/py-02-data-structures)
-- [🏠 Home](/?page=home)
+- [→ Next: Data Structures](#/py-data-structures)
+- [🏠 Home](#/home)

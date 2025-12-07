@@ -1,123 +1,224 @@
-# Markdown Renderer - Converts markdown to HTML
-# Demonstrates: String manipulation, regular expressions, classes
+# Markdown Renderer - Converts markdown to HTML with Prism syntax highlighting
+# Improved table handling with support for empty cells
 
 export default class MarkdownRenderer
   constructor: ->
-    @headingRegex = /^(#{1,6})\s+(.+)$/gm
-    @boldRegex = /\*\*(.+?)\*\*/g
-    @italicRegex = /\*(.+?)\*/g
-    @codeRegex = /`(.+?)`/g
-    @codeBlockRegex = /^```([a-z]*)\n([\s\S]*?)\n```$/gm
-    @listRegex = /^\s*[-*]\s+(.+)$/gm
-    @linkRegex = /\[(.+?)\]\((.+?)\)/g
-    @lineBreakRegex = /\n\n+/g
+    # Initialize renderer
 
   render: (markdown) ->
-    html = markdown
+    if !markdown or typeof markdown != 'string'
+      return ''
+    
+    lines = markdown.split('\n')
+    html = []
+    i = 0
+    
+    while i < lines.length
+      line = lines[i]
+      
+      # Code blocks (highest priority)
+      if line.startsWith('```')
+        lang = line.substring(3).trim()
+        code = []
+        i++
+        while i < lines.length and !lines[i].startsWith('```')
+          code.push(lines[i])
+          i++
+        i++  # Skip closing ```
+        html.push(@renderCodeBlock(code.join('\n'), lang))
+        continue
+      
+      # Horizontal rule
+      if line.match(/^-{3,}$/) or line.match(/^\*{3,}$/) or line.match(/^_{3,}$/)
+        html.push('<hr />')
+        i++
+        continue
+      
+      # Headings
+      if line.match(/^#{1,6}\s+/)
+        match = line.match(/^(#{1,6})\s+(.+)$/)
+        if match
+          level = match[1].length
+          content = match[2]
+          html.push("<h#{level}>#{@processInlineElements(content)}</h#{level}>")
+          i++
+          continue
+      
+      # Tables - improved handling
+      if line.trim().startsWith('|') and line.trim().endsWith('|')
+        tableLines = []
+        # Collect all table lines
+        while i < lines.length and lines[i].trim().startsWith('|') and lines[i].trim().endsWith('|')
+          tableLines.push(lines[i])
+          i++
+        
+        if tableLines.length >= 2
+          html.push(@renderTable(tableLines))
+        continue
+      
+      # Unordered lists
+      if line.match(/^[\s]*[-*]\s+/)
+        listLines = []
+        while i < lines.length and (lines[i].match(/^[\s]*[-*]\s+/) or lines[i].trim() == '')
+          if lines[i].trim() != ''
+            listLines.push(lines[i])
+          i++
+        if listLines.length > 0
+          html.push(@renderList(listLines))
+        continue
+      
+      # Empty lines
+      if line.trim() == ''
+        i++
+        continue
+      
+      # Paragraphs
+      paragraphLines = []
+      while i < lines.length and lines[i].trim() != '' and !lines[i].match(/^#{1,6}\s+/) and !lines[i].startsWith('```') and !lines[i].match(/^[\s]*[-*]\s+/) and !(lines[i].trim().startsWith('|') and lines[i].trim().endsWith('|'))
+        paragraphLines.push(lines[i])
+        i++
+      
+      if paragraphLines.length > 0
+        content = paragraphLines.join('\n')
+        html.push("<p>#{@processInlineElements(content)}</p>")
+    
+    html.join('\n')
 
-    # Code blocks first (preserve formatting)
-    html = html.replace(@codeBlockRegex, (match, lang, code) =>
-      @renderCodeBlock(code, lang)
-    )
+  renderCodeBlock: (code, lang = 'plaintext') ->
+    # Language aliases
+    langMap = {
+      'coffee': 'coffeescript'
+      'js': 'javascript'
+      'py': 'python'
+      'sh': 'bash'
+      'txt': 'plaintext'
+      '': 'plaintext'
+    }
+    
+    # Ensure lang is not empty
+    lang = 'plaintext' if !lang or lang.trim() == ''
+    
+    normalizedLang = langMap[lang] or lang or 'plaintext'
+    trimmedCode = code.trim()
+    
+    # Escape HTML entities
+    escapedCode = @escapeHtml(trimmedCode)
+    
+    # Use Prism for syntax highlighting if available
+    highlighted = if window.Prism? and window.Prism.languages[normalizedLang]?
+      try
+        grammar = window.Prism.languages[normalizedLang]
+        window.Prism.highlight(trimmedCode, grammar, normalizedLang)
+      catch
+        escapedCode
+    else
+      escapedCode
+    
+    """
+    <pre class="code-block language-#{normalizedLang}"><code class="language-#{normalizedLang}">#{highlighted}</code></pre>
+    """
 
-    # Headings
-    html = html.replace(@headingRegex, (match, hashes, content) =>
-      level = hashes.length
-      "<h#{level}>#{@escapeHtml(content)}</h#{level}>"
-    )
-
-    # Paragraphs (before inline formatting)
-    html = html.split(@lineBreakRegex)
-      .map((paragraph) =>
-        if paragraph.match(/^(#{1,6}|```|[-*]|<)/)
-          paragraph  # Skip already formatted
-        else
-          @renderInline(paragraph)
-      )
+  renderTable: (tableLines) ->
+    if tableLines.length < 2
+      return ''
+    
+    # Parse header row - keep empty cells
+    headerCells = @parseTableRow(tableLines[0])
+    
+    if headerCells.length == 0
+      return ''
+    
+    headerHtml = headerCells
+      .map((cell) => "<th>#{@processInlineElements(cell.trim())}</th>")
       .join('')
-
-    # Unordered lists
-    html = html.replace(/(<li>.*?<\/li>)/s, (match) ->
-      "<ul>#{match}</ul>"
-    )
-
-    html
-
-  renderInline: (text) ->
-    html = text
-
-    # Order matters: backticks first, then bold, then italic
-    html = html.replace(@codeRegex, '<code>$1</code>')
-    html = html.replace(@boldRegex, '<strong>$1</strong>')
-    html = html.replace(@italicRegex, '<em>$1</em>')
-    html = html.replace(@linkRegex, '<a href="$2" target="_blank">$1</a>')
-
-    "<p>#{html}</p>"
-
-  renderCodeBlock: (code, lang = 'coffeescript') ->
-    escaped = @escapeHtml(code)
-    highlighted = @highlightCode(escaped, lang)
+    
+    # Check if second line is a separator (contains only |, -, :, and whitespace)
+    startBody = 1
+    if tableLines.length > 1 and tableLines[1].match(/^\|[\s\-:|]+\|$/)
+      # Line 1 is separator, body starts at line 2
+      startBody = 2
+    
+    # Parse body rows - keep empty cells for proper table structure
+    bodyHtml = ''
+    for i in [startBody...tableLines.length]
+      line = tableLines[i]
+      
+      # Skip separator lines in body (shouldn't happen but just in case)
+      continue if line.match(/^\|[\s\-:|]+\|$/)
+      
+      cells = @parseTableRow(line)
+      
+      # Pad cells to match header length
+      while cells.length < headerCells.length
+        cells.push('')
+      
+      rowHtml = cells
+        .slice(0, headerCells.length)
+        .map((cell) => "<td>#{@processInlineElements(cell.trim())}</td>")
+        .join('')
+      bodyHtml += "<tr>#{rowHtml}</tr>"
+    
     """
-    <pre class="code-block language-#{lang}">
-      <code>#{highlighted}</code>
-    </pre>
+    <table class="markdown-table">
+      <thead><tr>#{headerHtml}</tr></thead>
+      <tbody>#{bodyHtml}</tbody>
+    </table>
     """
+  
+  parseTableRow: (line) ->
+    # Split by pipe, remove first and last empty parts
+    cells = line.split('|').slice(1, -1)
+    # Return cells as-is, preserving empty ones
+    cells
 
-  highlightCode: (code, lang) ->
-    # Basic syntax highlighting
-    switch lang
-      when 'coffeescript', 'coffee'
-        @highlightCoffeeScript(code)
-      when 'javascript', 'js'
-        @highlightJavaScript(code)
+  renderList: (listLines) ->
+    items = []
+    for line in listLines
+      match = line.match(/^[\s]*[-*]\s+(.+)$/)
+      if match
+        content = match[1]
+        items.push("<li>#{@processInlineElements(content)}</li>")
+    
+    if items.length > 0
+      "<ul>#{items.join('')}</ul>"
+    else
+      ''
+
+  processInlineElements: (text) ->
+    return '' if !text or typeof text != 'string'
+    
+    # Process in correct order to avoid conflicts
+    
+    # 1. Inline code (backticks) - protect this first
+    text = text.replace(/`([^`]+)`/g, '<code>$1</code>')
+    
+    # 2. Bold text - handle both ** and __
+    text = text.replace(/\*\*([^\*\*]+)\*\*/g, '<strong>$1</strong>')
+    text = text.replace(/__([^__]+)__/g, '<strong>$1</strong>')
+    
+    # 3. Italic text - handle both * and _
+    text = text.replace(/\*([^\*]+)\*/g, '<em>$1</em>')
+    text = text.replace(/_([^_]+)_/g, '<em>$1</em>')
+    
+    # 4. Links - handle internal (#/) vs external links differently
+    text = text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (match, linkText, url) =>
+      if url.startsWith('#/')
+        # Internal hash link - no target blank
+        "<a href=\"#{url}\">#{linkText}</a>"
       else
-        code
-
-  highlightCoffeeScript: (code) ->
-    # Keywords
-    keywords = ['class', 'constructor', 'if', 'else', 'for', 'in', 'while', 'return', 'new', 'this', '@', 'when', 'is', 'isnt', 'and', 'or', 'not', 'true', 'false', 'null', 'undefined']
+        # External link - open in new tab
+        "<a href=\"#{url}\" target=\"_blank\" rel=\"noopener\">#{linkText}</a>"
+    )
     
-    html = code
-    for keyword in keywords
-      pattern = new RegExp("\\b#{keyword}\\b", 'g')
-      html = html.replace(pattern, "<span class=\"kw\">#{keyword}</span>")
-
-    # Strings
-    html = html.replace(/(["'])([^"']*)\1/g, "<span class=\"str\">$&</span>")
-
-    # Numbers
-    html = html.replace(/\b(\d+)\b/g, "<span class=\"num\">$1</span>")
-
-    # Comments
-    html = html.replace(/(#[^\n]*)/g, "<span class=\"cmt\">$1</span>")
-
-    html
-
-  highlightJavaScript: (code) ->
-    # Similar to CoffeeScript but with JS keywords
-    keywords = ['class', 'constructor', 'if', 'else', 'for', 'while', 'return', 'new', 'this', 'function', 'const', 'let', 'var', 'true', 'false', 'null', 'undefined', 'async', 'await', 'import', 'export']
-    
-    html = code
-    for keyword in keywords
-      pattern = new RegExp("\\b#{keyword}\\b", 'g')
-      html = html.replace(pattern, "<span class=\"kw\">#{keyword}</span>")
-
-    # Strings
-    html = html.replace(/(["'`])([^"'`]*)\1/g, "<span class=\"str\">$&</span>")
-
-    # Numbers
-    html = html.replace(/\b(\d+)\b/g, "<span class=\"num\">$1</span>")
-
-    # Comments
-    html = html.replace(/(\/\/[^\n]*)/g, "<span class=\"cmt\">$1</span>")
-    html = html.replace(/(\/\*[\s\S]*?\*\/)/g, "<span class=\"cmt\">$1</span>")
-
-    html
+    text
 
   escapeHtml: (text) ->
-    div = document.createElement('div')
-    div.textContent = text
-    div.innerHTML
+    text
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;')
 
   # Convert markdown file content to HTML
   parseMarkdownFile: (content) ->

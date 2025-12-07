@@ -350,7 +350,7 @@ categories['fruits'][0]  # 'apple'
 ---
 
 **Navigation:**
-- [← Previous: Python Basics](/?page=python/py-01-basics)
-- [→ Next: Functions & Methods](/?page=python/py-03-functions)
-- [↑ Back to Python Basics](/?page=python/py-01-basics)
-- [🏠 Home](/?page=home)
+- [← Previous: Python Basics](#/py-basics)
+- [→ Next: Functions & Methods](#/py-functions)
+- [↑ Back to Python Basics](#/py-basics)
+- [🏠 Home](#/home)
