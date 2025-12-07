@@ -13,6 +13,7 @@ export default class Router
 
   # Navigate to a page
   navigate: (path, params = {}) ->
+    console.log("Router.navigate called with path: #{path}")
     @currentPage = path
     @currentParams = params
     
@@ -28,14 +29,27 @@ export default class Router
     
     # Execute handler
     handler = @routes[path]
-    handler?(@currentParams)
+    if handler?
+      console.log("Executing handler for: #{path}")
+      handler(@currentParams)
+    else
+      console.warn("No route handler found for: #{path}")
 
   # Handle back/forward buttons
   setupPopState: ->
     window.addEventListener('popstate', (e) =>
       if e.state?.path
+        @currentPage = e.state.path
+        @currentParams = e.state.params or {}
         handler = @routes[e.state.path]
-        handler?(e.state.params)
+        handler?(@currentParams)
+      else
+        # Handle initial hash navigation
+        { path, params } = @parseCurrentUrl()
+        @currentPage = path
+        @currentParams = params
+        handler = @routes[path]
+        handler?(params)
     )
 
   # Parse current URL on load

@@ -20,7 +20,7 @@ import py08Url from 'url:../tutorials/python/py-08-frameworks-libraries.md'
 import py09Url from 'url:../tutorials/python/py-09-logging.md'
 
 export default class TutorialPage
-  constructor: (@container) ->
+  constructor: (@container, @router) ->
     @renderer = new MarkdownRenderer()
     @tutorials = {}
     @tutorialUrls = {}
@@ -103,4 +103,22 @@ export default class TutorialPage
     # Trigger Prism syntax highlighting
     if window.Prism?
       window.Prism.highlightAllUnder(@container)
-
+    
+    # Attach click handlers to internal navigation links
+    @attachLinkHandlers()
+  
+  attachLinkHandlers: ->
+    # Find all links that start with #/
+    links = @container.querySelectorAll('a[href^="#/"]')
+    console.log("Found #{links.length} internal navigation links")
+    links.forEach((link) =>
+      link.addEventListener('click', (e) =>
+        e.preventDefault()
+        href = link.getAttribute('href')
+        # Extract path from #/path
+        path = href.substring(2)
+        console.log("Navigating to: #{path}")
+        # Navigate using router
+        @router.navigate(path) if @router?
+      )
+    )
