@@ -8,7 +8,7 @@ export default class TodoItem
 
   render: ->
     @element = document.createElement('div')
-    @element.className = "todo-item #{@todo.statusBadge} priority-#{@todo.priority}"
+    @element.className = "todo-item #{@todo.statusBadge()} priority-#{@todo.priority}"
     @element.dataset.todoId = @todo.id
 
     priorityIcon = switch @todo.priority
@@ -25,28 +25,31 @@ export default class TodoItem
       else '📝'
 
     dueDate = if @todo.dueDate
-      "<span class=\"due-date\">📅 #{@todo.formattedDate}</span>"
+      "<span class=\"due-date\">📅 #{@todo.formattedDate()}</span>"
     else
       ''
 
-    @element.innerHTML = '''
-      <div class="todo-content">
-        <input type="checkbox" class="todo-checkbox" #{if @todo.completed then 'checked' else ''} />
-        <div class="todo-details">
-          <div class="todo-header">
-            <span class="priority-indicator" title="Priority: #{@todo.priority}">#{priorityIcon}</span>
-            <span class="category-badge" title="#{@todo.category}">#{categoryEmoji}</span>
-            <span class="todo-text">#{@todo.displayTitle}</span>
+    checkedAttr = if @todo.completed then 'checked' else ''
+    descriptionHtml = if @todo.description then "<div class=\"todo-description\">#{@todo.description}</div>" else ''
+
+    @element.innerHTML = "
+      <div class=\"todo-content\">
+        <input type=\"checkbox\" class=\"todo-checkbox\" #{checkedAttr} />
+        <div class=\"todo-details\">
+          <div class=\"todo-header\">
+            <span class=\"priority-indicator\" title=\"Priority: #{@todo.priority}\">#{priorityIcon}</span>
+            <span class=\"category-badge\" title=\"#{@todo.category}\">#{categoryEmoji}</span>
+            <span class=\"todo-text\">#{@todo.displayTitle()}</span>
             #{dueDate}
           </div>
-          #{if @todo.description then "<div class=\"todo-description\">#{@todo.description}</div>" else ''}
+          #{descriptionHtml}
         </div>
       </div>
-      <div class="todo-actions">
-        <button class="edit-btn" title="Edit" aria-label="Edit todo">✏️</button>
-        <button class="delete-btn" title="Delete" aria-label="Delete todo">🗑️</button>
+      <div class=\"todo-actions\">
+        <button class=\"edit-btn\" title=\"Edit\" aria-label=\"Edit todo\">✏️</button>
+        <button class=\"delete-btn\" title=\"Delete\" aria-label=\"Delete todo\">🗑️</button>
       </div>
-    '''
+    "
 
     @attachEventListeners()
     @element
@@ -57,24 +60,24 @@ export default class TodoItem
     editBtn = @element.querySelector('.edit-btn')
 
     checkbox.addEventListener('change', =>
-      @onToggle?.(@todo.id)
+      @onToggle(@todo.id) if @onToggle
     )
 
     deleteBtn.addEventListener('click', =>
-      @onDelete?.(@todo.id)
+      @onDelete(@todo.id) if @onDelete
     )
 
     editBtn.addEventListener('click', =>
-      @onEdit?.(@todo.id)
+      @onEdit(@todo.id) if @onEdit
     )
 
     # Double-click to edit
     @element.addEventListener('dblclick', =>
-      @onEdit?.(@todo.id)
+      @onEdit(@todo.id) if @onEdit
     )
 
   remove: ->
-    @element?.remove()
+    @element.remove() if @element
 
   update: (todo) ->
     @todo = todo

@@ -8,11 +8,11 @@ export default class Router
     @setupPopState()
 
   # Register a route
-  register: (path: string, handler) ->
+  register: (path, handler) ->
     @routes[path] = handler
 
   # Navigate to a page
-  navigate: (path: string, params = {}) ->
+  navigate: (path, params = {}) ->
     @currentPage = path
     @currentParams = params
     
@@ -24,7 +24,7 @@ export default class Router
     else
       ''
     
-    window.history.pushState({ path, params }, '', "/##{path}#{queryString}")
+    window.history.pushState({ path, params }, '', "#/#{path}#{queryString}")
     
     # Execute handler
     handler = @routes[path]
@@ -40,17 +40,21 @@ export default class Router
 
   # Parse current URL on load
   parseCurrentUrl: ->
-    hash = window.location.hash.slice(1)
-    query = window.location.search.slice(1)
+    hash = window.location.hash.slice(1)  # Remove #
+    
+    # Remove leading / if present
+    hash = hash.slice(1) if hash.startsWith('/')
     
     [path, ...rest] = hash.split('?')
     path = path or 'home'
     
+    # Parse query string
+    query = rest.join('?')
     params = {}
     if query
       for param in query.split('&')
         [key, value] = param.split('=')
-        params[key] = decodeURIComponent(value)
+        params[key] = decodeURIComponent(value) if key
     
     { path, params }
 

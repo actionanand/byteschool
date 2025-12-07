@@ -12,7 +12,7 @@ export default class MarkdownRenderer
     @linkRegex = /\[(.+?)\]\((.+?)\)/g
     @lineBreakRegex = /\n\n+/g
 
-  render: (markdown: string) ->
+  render: (markdown) ->
     html = markdown
 
     # Code blocks first (preserve formatting)
@@ -43,7 +43,7 @@ export default class MarkdownRenderer
 
     html
 
-  renderInline: (text: string) ->
+  renderInline: (text) ->
     html = text
 
     # Order matters: backticks first, then bold, then italic
@@ -54,7 +54,7 @@ export default class MarkdownRenderer
 
     "<p>#{html}</p>"
 
-  renderCodeBlock: (code: string, lang: string = 'coffeescript') ->
+  renderCodeBlock: (code, lang = 'coffeescript') ->
     escaped = @escapeHtml(code)
     highlighted = @highlightCode(escaped, lang)
     """
@@ -63,7 +63,7 @@ export default class MarkdownRenderer
     </pre>
     """
 
-  highlightCode: (code: string, lang: string) ->
+  highlightCode: (code, lang) ->
     # Basic syntax highlighting
     switch lang
       when 'coffeescript', 'coffee'
@@ -73,7 +73,7 @@ export default class MarkdownRenderer
       else
         code
 
-  highlightCoffeeScript: (code: string) ->
+  highlightCoffeeScript: (code) ->
     # Keywords
     keywords = ['class', 'constructor', 'if', 'else', 'for', 'in', 'while', 'return', 'new', 'this', '@', 'when', 'is', 'isnt', 'and', 'or', 'not', 'true', 'false', 'null', 'undefined']
     
@@ -93,7 +93,7 @@ export default class MarkdownRenderer
 
     html
 
-  highlightJavaScript: (code: string) ->
+  highlightJavaScript: (code) ->
     # Similar to CoffeeScript but with JS keywords
     keywords = ['class', 'constructor', 'if', 'else', 'for', 'while', 'return', 'new', 'this', 'function', 'const', 'let', 'var', 'true', 'false', 'null', 'undefined', 'async', 'await', 'import', 'export']
     
@@ -114,13 +114,13 @@ export default class MarkdownRenderer
 
     html
 
-  escapeHtml: (text: string) ->
+  escapeHtml: (text) ->
     div = document.createElement('div')
     div.textContent = text
     div.innerHTML
 
   # Convert markdown file content to HTML
-  parseMarkdownFile: (content: string) ->
+  parseMarkdownFile: (content) ->
     lines = content.split('\n')
     sections = []
     currentSection = { title: '', content: '' }

@@ -23,48 +23,50 @@ export default class StatsComponent
       when stats.completionPercentage >= 25 then '#f59e0b'
       else '#ef4444'
 
-    @container.innerHTML = '''
-      <div class="stats-panel">
-        <div class="stats-header">
+    overdueHtml = if stats.overdue > 0 then "<span class=\"stat-item overdue\"><span class=\"stat-label\">Overdue:</span><span class=\"stat-value\">#{stats.overdue}</span></span>" else ''
+
+    @container.innerHTML = "
+      <div class=\"stats-panel\">
+        <div class=\"stats-header\">
           <h3>📊 Progress</h3>
-          <div class="stat-summary">
-            <span class="stat-item">
-              <span class="stat-label">Total:</span>
-              <span class="stat-value">#{stats.total}</span>
+          <div class=\"stat-summary\">
+            <span class=\"stat-item\">
+              <span class=\"stat-label\">Total:</span>
+              <span class=\"stat-value\">#{stats.total}</span>
             </span>
-            <span class="stat-item">
-              <span class="stat-label">Done:</span>
-              <span class="stat-value">#{stats.completed}</span>
+            <span class=\"stat-item\">
+              <span class=\"stat-label\">Done:</span>
+              <span class=\"stat-value\">#{stats.completed}</span>
             </span>
-            <span class="stat-item">
-              <span class="stat-label">Active:</span>
-              <span class="stat-value">#{stats.active}</span>
+            <span class=\"stat-item\">
+              <span class=\"stat-label\">Active:</span>
+              <span class=\"stat-value\">#{stats.active}</span>
             </span>
-            #{if stats.overdue > 0 then "<span class=\"stat-item overdue\"><span class=\"stat-label\">Overdue:</span><span class=\"stat-value\">#{stats.overdue}</span></span>" else ''}
+            #{overdueHtml}
           </div>
         </div>
 
-        <div class="progress-section">
-          <div class="progress-header">
-            <span class="progress-label">Completion</span>
-            <span class="progress-percentage">#{stats.completionPercentage}%</span>
+        <div class=\"progress-section\">
+          <div class=\"progress-header\">
+            <span class=\"progress-label\">Completion</span>
+            <span class=\"progress-percentage\">#{stats.completionPercentage}%</span>
           </div>
-          <div class="progress-bar">
-            <div class="progress-fill" style="width: #{progressBarWidth}%; background-color: #{progressBarColor};"></div>
+          <div class=\"progress-bar\">
+            <div class=\"progress-fill\" style=\"width: #{progressBarWidth}%; background-color: #{progressBarColor};\"></div>
           </div>
         </div>
 
-        <div class="stats-section">
+        <div class=\"stats-section\">
           <h4>By Category</h4>
-          <div class="stat-badges">#{categoryBadges}</div>
+          <div class=\"stat-badges\">#{categoryBadges}</div>
         </div>
 
-        <div class="stats-section">
+        <div class=\"stats-section\">
           <h4>By Priority</h4>
-          <div class="stat-badges">#{priorityBadges}</div>
+          <div class=\"stat-badges\">#{priorityBadges}</div>
         </div>
       </div>
-    '''
+    "
 
   update: ->
     @render()

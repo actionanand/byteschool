@@ -14,23 +14,23 @@ export default class TodoStore
     @loadFromStorage()
 
   # Add a new todo
-  addTodo: (title: string, category: string = 'general', priority: string = 'medium') ->
+  addTodo: (title, category = 'general', priority = 'medium') ->
     todo = new Todo(title, category, priority)
     @todos.push(todo)
     @saveToStorage()
     todo
 
   # Remove a todo
-  removeTodo: (id: string) ->
+  removeTodo: (id) ->
     @todos = @todos.filter((todo) -> todo.id isnt id)
     @saveToStorage()
 
   # Get a specific todo
-  getTodo: (id: string) ->
+  getTodo: (id) ->
     @todos.find((todo) -> todo.id is id)
 
   # Update a todo (demonstrates object spreading)
-  updateTodo: (id: string, updates: Object) ->
+  updateTodo: (id, updates) ->
     todo = @getTodo(id)
     return null unless todo?
     
@@ -40,9 +40,9 @@ export default class TodoStore
     todo
 
   # Toggle todo completion status
-  toggleTodo: (id: string) ->
+  toggleTodo: (id) ->
     todo = @getTodo(id)
-    todo?.toggle()
+    todo.toggle() if todo
     @saveToStorage()
     todo
 
@@ -79,7 +79,7 @@ export default class TodoStore
     )
 
   # Get todos by category (array comprehension style)
-  getTodosByCategory: (category: string) ->
+  getTodosByCategory: (category) ->
     @todos.filter((todo) -> todo.category is category)
 
   # Get statistics (demonstrates comprehensions and reduce)
@@ -87,7 +87,7 @@ export default class TodoStore
     total = @todos.length
     completed = @todos.filter((todo) -> todo.completed).length
     active = total - completed
-    overdue = @todos.filter((todo) -> todo.isOverdue).length
+    overdue = @todos.filter((todo) -> todo.isOverdue()).length
 
     # Count by category
     byCategory = {}
@@ -112,7 +112,7 @@ export default class TodoStore
     }
 
   # Set filter
-  setFilter: (filterType: string, value: string) ->
+  setFilter: (filterType, value) ->
     @filters[filterType] = value
 
   # Clear all filters

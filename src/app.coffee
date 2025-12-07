@@ -20,22 +20,22 @@ export default class TodoApp
 
   setupDOM: ->
     app = document.getElementById('app')
-    app.innerHTML = '''
-      <div class="app-container">
-        <div class="navbar-container"></div>
+    app.innerHTML = "
+      <div class=\"app-container\">
+        <div class=\"navbar-container\"></div>
 
-        <main class="app-main">
-          <div class="app-content">
-            <div class="page-container"></div>
+        <main class=\"app-main\">
+          <div class=\"app-content\">
+            <div class=\"page-container\"></div>
           </div>
         </main>
 
-        <footer class="app-footer">
+        <footer class=\"app-footer\">
           <p>📚 <strong>ByteSchool</strong> - Learn CoffeeScript & Python</p>
-          <p class="keyboard-hint">💡 Tip: Press <kbd>?</kbd> for keyboard shortcuts</p>
+          <p class=\"keyboard-hint\">💡 Tip: Press <kbd>?</kbd> for keyboard shortcuts</p>
         </footer>
       </div>
-    '''
+    "
 
   setupRouter: ->
     @router = new Router()
@@ -43,68 +43,80 @@ export default class TodoApp
     # Home page - Todo App
     @router.register('home', (params) =>
       @showTodoApp()
+      @updateNavigation()
     )
     
     # CoffeeScript tutorial pages
     @router.register('basics', (params) =>
       @showTutorial('coffeescript/01-basics')
+      @updateNavigation()
     )
     
     @router.register('functions', (params) =>
       @showTutorial('coffeescript/02-functions')
+      @updateNavigation()
     )
     
     @router.register('classes', (params) =>
       @showTutorial('coffeescript/03-classes')
+      @updateNavigation()
     )
     
     @router.register('advanced', (params) =>
       @showTutorial('coffeescript/04-advanced')
+      @updateNavigation()
     )
     
     @router.register('app-architecture', (params) =>
       @showTutorial('coffeescript/05-app-architecture')
+      @updateNavigation()
     )
     
     # Python tutorial pages
     @router.register('py-basics', (params) =>
       @showTutorial('python/py-01-basics')
+      @updateNavigation()
     )
     
     @router.register('py-data-structures', (params) =>
       @showTutorial('python/py-02-data-structures')
+      @updateNavigation()
     )
     
     @router.register('py-functions', (params) =>
       @showTutorial('python/py-03-functions')
+      @updateNavigation()
     )
     
     @router.register('py-classes', (params) =>
       @showTutorial('python/py-04-classes')
+      @updateNavigation()
     )
     
     @router.register('py-advanced', (params) =>
       @showTutorial('python/py-05-advanced')
+      @updateNavigation()
     )
     
     @router.register('py-database', (params) =>
       @showTutorial('python/py-06-database')
+      @updateNavigation()
     )
     
     @router.register('py-file-organization', (params) =>
       @showTutorial('python/py-07-file-organization')
+      @updateNavigation()
     )
     
     @router.register('py-frameworks-libraries', (params) =>
       @showTutorial('python/py-08-frameworks-libraries')
+      @updateNavigation()
     )
     
     @router.register('py-logging', (params) =>
       @showTutorial('python/py-09-logging')
+      @updateNavigation()
     )
-    
-    # Start router and handle initial page
-    @router.start()
 
   initializeComponents: ->
     # Navbar
@@ -115,8 +127,8 @@ export default class TodoApp
     pageContainer = document.querySelector('.page-container')
     @tutorialPage = new TutorialPage(pageContainer)
     
-    # Update active nav when route changes
-    @updateNavigation()
+    # Start router after components initialized
+    @router.start()
 
   setupEventListeners: ->
     # Router handles all page navigation
@@ -126,47 +138,47 @@ export default class TodoApp
     pageContainer = document.querySelector('.page-container')
     
     # Clear previous content
-    pageContainer.innerHTML = '''
-      <div class="todo-page">
-        <header class="app-header">
-          <div class="header-content">
+    pageContainer.innerHTML = "
+      <div class=\"todo-page\">
+        <header class=\"app-header\">
+          <div class=\"header-content\">
             <h1>☕ Coffee TODO</h1>
-            <p class="subtitle">A beautiful task manager built with CoffeeScript</p>
+            <p class=\"subtitle\">A beautiful task manager built with CoffeeScript</p>
           </div>
         </header>
 
-        <div class="input-section"></div>
+        <div class=\"input-section\"></div>
 
-        <div class="control-panel">
-          <div class="filter-group">
-            <button class="filter-btn active" data-filter="all">All</button>
-            <button class="filter-btn" data-filter="active">Active</button>
-            <button class="filter-btn" data-filter="completed">Completed</button>
+        <div class=\"control-panel\">
+          <div class=\"filter-group\">
+            <button class=\"filter-btn active\" data-filter=\"all\">All</button>
+            <button class=\"filter-btn\" data-filter=\"active\">Active</button>
+            <button class=\"filter-btn\" data-filter=\"completed\">Completed</button>
           </div>
-          <div class="category-filter">
-            <select id="category-filter" class="category-dropdown">
-              <option value="all">All Categories</option>
-              <option value="general">General</option>
-              <option value="work">Work</option>
-              <option value="personal">Personal</option>
-              <option value="shopping">Shopping</option>
-              <option value="health">Health</option>
+          <div class=\"category-filter\">
+            <select id=\"category-filter\" class=\"category-dropdown\">
+              <option value=\"all\">All Categories</option>
+              <option value=\"general\">General</option>
+              <option value=\"work\">Work</option>
+              <option value=\"personal\">Personal</option>
+              <option value=\"shopping\">Shopping</option>
+              <option value=\"health\">Health</option>
             </select>
           </div>
-          <input type="text" id="search-input" class="search-box" placeholder="🔍 Search todos..." />
-          <button id="clear-btn" class="clear-btn" title="Clear completed todos">Clear Done</button>
+          <input type=\"text\" id=\"search-input\" class=\"search-box\" placeholder=\"🔍 Search todos...\" />
+          <button id=\"clear-btn\" class=\"clear-btn\" title=\"Clear completed todos\">Clear Done</button>
         </div>
 
-        <div class="content-wrapper">
-          <div class="todos-section">
-            <div class="list-container"></div>
+        <div class=\"content-wrapper\">
+          <div class=\"todos-section\">
+            <div class=\"list-container\"></div>
           </div>
-          <aside class="stats-sidebar">
-            <div class="stats-container"></div>
+          <aside class=\"stats-sidebar\">
+            <div class=\"stats-container\"></div>
           </aside>
         </div>
       </div>
-    '''
+    "
 
     # Initialize todo components
     inputSection = pageContainer.querySelector('.input-section')
@@ -182,7 +194,7 @@ export default class TodoApp
     # Attach control panel listeners
     @setupTodoEventListeners()
 
-  showTutorial: (tutorialName: string) ->
+  showTutorial: (tutorialName) ->
     pageContainer = document.querySelector('.page-container')
     @tutorialPage.container = pageContainer
     @tutorialPage.render(tutorialName)
@@ -253,17 +265,7 @@ export default class TodoApp
     )
 
   showKeyboardHelp: ->
-    shortcuts = '''
-      ⌨️ Keyboard Shortcuts
-
-      Ctrl/Cmd + N - Focus input (New todo)
-      Ctrl/Cmd + K - Clear search
-      Enter - Add todo
-      Double-click - Edit todo
-      ? - Show this help
-
-      Available at any time!
-    '''
+    shortcuts = "⌨️ Keyboard Shortcuts\n\nCtrl/Cmd + N - Focus input (New todo)\nCtrl/Cmd + K - Clear search\nEnter - Add todo\nDouble-click - Edit todo\n? - Show this help\n\nAvailable at any time!"
     alert(shortcuts)
 
   handleAddTodo: (title, category, priority) ->

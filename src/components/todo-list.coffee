@@ -31,14 +31,14 @@ export default class TodoList
 
   handleToggle: (id) ->
     @store.toggleTodo(id)
-    @onUpdated?.()
+    @onUpdated?() if @onUpdated
 
   handleDelete: (id) ->
     # Confirm deletion
     if confirm('Are you sure you want to delete this todo?')
       @store.removeTodo(id)
       delete @items[id]
-      @onUpdated?.()
+      @onUpdated?() if @onUpdated
 
   handleEdit: (id) ->
     todo = @store.getTodo(id)
@@ -50,7 +50,7 @@ export default class TodoList
     try
       todo.title = newTitle.trim()
       @store.saveToStorage()
-      @onUpdated?.()
+      @onUpdated?() if @onUpdated
     catch error
       alert("Error: #{error.message}")
 

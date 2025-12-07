@@ -7,35 +7,35 @@ export default class TodoInputForm
     @attachEventListeners()
 
   render: ->
-    @container.innerHTML = '''
-      <form class="input-form" id="todo-form">
-        <div class="input-group">
+    @container.innerHTML = "
+      <form class=\"input-form\" id=\"todo-form\">
+        <div class=\"input-group\">
           <input
-            type="text"
-            class="todo-input"
-            id="todo-input"
-            placeholder="What needs to be done today?"
-            autocomplete="off"
+            type=\"text\"
+            class=\"todo-input\"
+            id=\"todo-input\"
+            placeholder=\"What needs to be done today?\"
+            autocomplete=\"off\"
           />
-          <select class="category-select" id="category-select">
-            <option value="general">General</option>
-            <option value="work">Work</option>
-            <option value="personal">Personal</option>
-            <option value="shopping">Shopping</option>
-            <option value="health">Health</option>
+          <select class=\"category-select\" id=\"category-select\">
+            <option value=\"general\">General</option>
+            <option value=\"work\">Work</option>
+            <option value=\"personal\">Personal</option>
+            <option value=\"shopping\">Shopping</option>
+            <option value=\"health\">Health</option>
           </select>
-          <select class="priority-select" id="priority-select">
-            <option value="low">Low</option>
-            <option value="medium" selected>Medium</option>
-            <option value="high">High</option>
+          <select class=\"priority-select\" id=\"priority-select\">
+            <option value=\"low\">Low</option>
+            <option value=\"medium\" selected>Medium</option>
+            <option value=\"high\">High</option>
           </select>
-          <button type="submit" class="add-button" title="Add todo (Enter)">
-            <span class="icon">+</span>
+          <button type=\"submit\" class=\"add-button\" title=\"Add todo (Enter)\">
+            <span class=\"icon\">+</span>
             Add
           </button>
         </div>
       </form>
-    '''
+    "
 
   attachEventListeners: ->
     form = document.getElementById('todo-form')

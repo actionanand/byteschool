@@ -24,50 +24,37 @@ export default class NavigationBar
     @attachEventListeners()
 
   render: ->
-    @container.innerHTML = '''
-      <nav class="navbar">
-        <div class="nav-brand">
-          <h1 class="brand-text">📚 ByteSchool</h1>
-          <p class="brand-subtitle">Learn CoffeeScript & Python</p>
-        </div>
-        <div class="nav-sections">
-          <div class="nav-section coffee-section">
-            <h3 class="section-title">☕ CoffeeScript</h3>
-            <ul class="nav-menu" data-section="coffee"></ul>
-          </div>
-          <div class="nav-section python-section">
-            <h3 class="section-title">🐍 Python</h3>
-            <ul class="nav-menu" data-section="python"></ul>
-          </div>
-        </div>
-      </nav>
-    '''
-
-    # Populate CoffeeScript menu
-    coffeeMenu = @container.querySelector('.nav-menu[data-section="coffee"]')
+    # Build coffee items HTML
+    coffeeItemsHtml = ''
     coffeeItems = @navItems.filter((item) -> item.section is 'coffee')
     for item in coffeeItems
-      li = @createNavItem(item)
-      coffeeMenu.appendChild(li)
-    
-    # Populate Python menu
-    pythonMenu = @container.querySelector('.nav-menu[data-section="python"]')
+      coffeeItemsHtml += "<li class=\"nav-item\" data-page=\"#{item.page}\"><a href=\"#/#{item.page}\" class=\"nav-link\"><span class=\"nav-icon\">#{item.icon}</span><span class=\"nav-label\">#{item.label}</span></a></li>"
+
+    # Build python items HTML
+    pythonItemsHtml = ''
     pythonItems = @navItems.filter((item) -> item.section is 'python')
     for item in pythonItems
-      li = @createNavItem(item)
-      pythonMenu.appendChild(li)
-  
-  createNavItem: (item) ->
-    li = document.createElement('li')
-    li.className = 'nav-item'
-    li.dataset.page = item.page
-    li.innerHTML = """
-      <a href="#/#{item.page}" class="nav-link">
-        <span class="nav-icon">#{item.icon}</span>
-        <span class="nav-label">#{item.label}</span>
-      </a>
-    """
-    li
+      pythonItemsHtml += "<li class=\"nav-item\" data-page=\"#{item.page}\"><a href=\"#/#{item.page}\" class=\"nav-link\"><span class=\"nav-icon\">#{item.icon}</span><span class=\"nav-label\">#{item.label}</span></a></li>"
+
+    # Render navbar
+    navHtml = "<nav class=\"navbar\">" +
+      "<div class=\"nav-brand\">" +
+      "<h1 class=\"brand-text\">📚 ByteSchool</h1>" +
+      "<p class=\"brand-subtitle\">Learn CoffeeScript & Python</p>" +
+      "</div>" +
+      "<div class=\"nav-sections\">" +
+      "<div class=\"nav-section coffee-section\">" +
+      "<h3 class=\"section-title\">☕ CoffeeScript Tutorials</h3>" +
+      "<ul class=\"nav-menu\" data-section=\"coffee\">#{coffeeItemsHtml}</ul>" +
+      "</div>" +
+      "<div class=\"nav-section python-section\">" +
+      "<h3 class=\"section-title\">🐍 Python Tutorials</h3>" +
+      "<ul class=\"nav-menu\" data-section=\"python\">#{pythonItemsHtml}</ul>" +
+      "</div>" +
+      "</div>" +
+      "</nav>"
+    
+    @container.innerHTML = navHtml
 
   attachEventListeners: ->
     menus = @container.querySelectorAll('.nav-menu')
@@ -93,7 +80,7 @@ export default class NavigationBar
       )
     )
 
-  setActivePage: (page: string) ->
+  setActivePage: (page) ->
     @container.querySelectorAll('.nav-item').forEach((item) ->
       if item.dataset.page is page
         item.classList.add('active')
