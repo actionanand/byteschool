@@ -6,7 +6,8 @@
     "node": ">=18.0.0 <23.0.0"
   },
   "scripts": {
-    "dev": "parcel index.html --open --port 3001",
+    "dev": "parcel index.html --port 3001",
+    "dev:open": "parcel index.html --open --port 3001",
     "build": "parcel build index.html --public-url ./",
     "build:gh": "parcel build index.html --public-url /byteschool/",
     "clean": "rm -rf dist .parcel-cache",
